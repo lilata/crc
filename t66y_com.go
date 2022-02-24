@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/gocolly/colly"
 	"io/ioutil"
-	"log"
 	"strconv"
 	"strings"
 )
@@ -50,22 +49,20 @@ func searchKeywords(keywords ...string) (urls []string) {
 		r.Headers.Set("User-Agent", DefaultUA)
 		r.Headers.Set("Accept", "*/*")
 	})
-	for i := 1; i <= t66y_com_MaxPage; i++ {
-		c.OnHTML("tr.tr3.t_one.tac td.tal h3 a", func(e *colly.HTMLElement) {
-			for _, kw := range keywords {
-				if strings.Contains(e.Text, kw) {
-					url := e.Attr("href")
-					if !strings.HasPrefix(url, "http") {
-						url = fmt.Sprintf("https://%s/%s", t66y_com_Hostname, url)
-					}
-					if !contains(urls, url) {
-						urls = append(urls, url)
-						log.Println(e.Text, " ", url)
-					}
+	c.OnHTML("tr.tr3.t_one.tac td.tal h3 a", func(e *colly.HTMLElement) {
+		for _, kw := range keywords {
+			if strings.Contains(e.Text, kw) {
+				url := e.Attr("href")
+				if !strings.HasPrefix(url, "http") {
+					url = fmt.Sprintf("https://%s/%s", t66y_com_Hostname, url)
+				}
+				if !contains(urls, url) {
+					urls = append(urls, url)
 				}
 			}
-			e.Request.Visit(e.Attr("href"))
-		})
+		}
+	})
+	for i := 1; i <= t66y_com_MaxPage; i++ {
 		c.Visit(fmt.Sprintf(baseUrl, strconv.Itoa(i)))
 	}
 	return

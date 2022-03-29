@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"strconv"
 	"strings"
+	"time"
 )
 func fetchRmdownMagnetURLInSession(hash string, session *httpSession) (string, error) {
 	pageUrl := fmt.Sprintf("http://www.rmdown.com/link.php?hash=%s", hash)
@@ -44,6 +45,7 @@ func searchKeywords(keywords ...string) (urls []string) {
 	c.Limit(&colly.LimitRule{
 		DomainGlob:  "*",
 		Parallelism: 1,
+		Delay: 13 * time.Second,
 	})
 	c.OnRequest(func(r *colly.Request) {
 		r.Headers.Set("User-Agent", DefaultUA)

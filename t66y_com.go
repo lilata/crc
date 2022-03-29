@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gocolly/colly"
 	"io/ioutil"
+	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -60,6 +61,7 @@ func searchKeywords(keywords ...string) (urls []string) {
 				}
 				if !contains(urls, url) {
 					urls = append(urls, url)
+					log.Println(e.Text, url)
 				}
 			}
 		}

@@ -46,7 +46,7 @@ func searchKeywords(keywords ...string) (urls []string) {
 	c.Limit(&colly.LimitRule{
 		DomainGlob:  "*",
 		Parallelism: 1,
-		Delay: 13 * time.Second,
+		Delay: 12 * time.Second,
 	})
 	c.OnRequest(func(r *colly.Request) {
 		r.Headers.Set("User-Agent", DefaultUA)

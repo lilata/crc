@@ -9,7 +9,19 @@ type httpSession struct {
 	client *http.Client
 	cookies []*http.Cookie
 }
-
+func (s *httpSession) setCookie(cookie *http.Cookie) {
+	updated := false
+	for idx, c := range s.cookies {
+		if c.Name == cookie.Name {
+			s.cookies[idx] = cookie
+			updated = true
+			break
+		}
+	}
+	if !updated {
+		s.cookies = append(s.cookies, cookie)
+	}
+}
 func (s *httpSession) MakeRequest(method string, url string, body io.Reader) (resp *http.Response, err error) {
 	req, _ := http.NewRequest(method, url, body)
 	req.Header.Set("User-Agent", DefaultUA)
@@ -18,7 +30,7 @@ func (s *httpSession) MakeRequest(method string, url string, body io.Reader) (re
 	}
 	resp, err = s.client.Do(req)
 	for _, cookie := range resp.Cookies() {
-		s.cookies = append(s.cookies, cookie)
+		s.setCookie(cookie)
 	}
 	return
 }

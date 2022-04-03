@@ -55,6 +55,9 @@ func t66ySearchKeywords(keywords ...string) {
 			if hasTitle(title) {
 				continue
 			}
+			if !contains(keywords, title) {
+				continue
+			}
 			entry := NewDataEntry()
 			postUrl := fmt.Sprintf("https://%s/%s", t66y_com_Hostname, titleTag.Attrs()["href"])
 			postHTML := session.GetBody(postUrl)
@@ -103,9 +106,6 @@ func t66ySearchKeywords(keywords ...string) {
 				}
 			}
 
-			//if !contains(keywords, Title) {
-			//	continue
-			//}
 			dateTag := tds[2].Find("div").Find("span")
 			dateStr := dateTag.Attrs()["title"]
 			dateStr = strings.Split(dateStr, " - ")[1]

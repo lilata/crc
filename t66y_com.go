@@ -32,7 +32,7 @@ func fetchRmdownMagnetURL(hash string) (string, error) {
 }
 func contains(s []string, e string) bool {
 	for _, a := range s {
-		if a == e {
+		if strings.Contains(e, a) {
 			return true
 		}
 	}

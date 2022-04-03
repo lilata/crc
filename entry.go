@@ -76,7 +76,7 @@ func getPage(page int) []byte {
 		break
 	}
 	query := fmt.Sprintf("SELECT Uuid, Title, ts, Description, Images, download_link" +
-		" FROM data_entries WHERE id <= %s ORDER BY id DESC",
+		" FROM data_entries WHERE id <= %s ORDER BY id DESC LIMIT 10",
 		strconv.FormatInt(largestId - int64((page - 1) * 10), 10))
 	rows, err = db.Query(query)
 	if err != nil {

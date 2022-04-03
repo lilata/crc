@@ -110,7 +110,7 @@ func t66ySearchKeywords(keywords ...string) {
 			dateStr := dateTag.Attrs()["title"]
 			dateStrs := strings.Split(dateStr, " - ")
 			var date time.Time
-			if len(dateStr) < 2 {
+			if len(dateStrs) < 2 {
 				date, _ = time.Parse("2006-01-02", "1998-01-01")
 			} else {
 				date, _ = time.Parse("2006-01-02", dateStrs[1])

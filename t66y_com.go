@@ -115,7 +115,6 @@ func t66ySearchKeywords(keywords ...string) {
 			entry.Timestamp = t
 			entry.Description = ""
 			entry.saveToDatabase()
-			getPage(1)
 			time.Sleep(t66y_com_Interval * time.Second)
 		}
 		time.Sleep(t66y_com_Interval * time.Second)

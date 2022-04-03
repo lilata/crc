@@ -48,16 +48,19 @@ func t66ySearchKeywords(keywords ...string) {
 		tbody := parsedBody.Find("tbody", "id", "tbody")
 		posts := tbody.FindAll("tr")
 		for _, p := range posts {
-			entry := NewDataEntry()
 			tds := p.FindAll("td")
 			titleTag := tds[1].Find("h3").Find("a")
 			title := titleTag.Text()
+			if hasTitle(title) {
+				continue
+			}
+			entry := NewDataEntry()
 			postUrl := fmt.Sprintf("https://%s/%s", t66y_com_Hostname, titleTag.Attrs()["href"])
 			postHTML := session.GetBody(postUrl)
 			post := soup.HTMLParse(postHTML)
 			imgs := post.FindAll("img")
 			if len(imgs) > 0 {
-				mediaDir := fmt.Sprintf("media/%s", entry.uuid)
+				mediaDir := fmt.Sprintf("media/%s", entry.Uuid)
 				_, err := os.Stat(mediaDir)
 				if os.IsNotExist(err) {
 					os.Mkdir(mediaDir, 0755)
@@ -76,11 +79,11 @@ func t66ySearchKeywords(keywords ...string) {
 				ext := s[len(s) - 1]
 				filename := fmt.Sprintf("%s.%s", strconv.Itoa(idx), ext)
 				f, err := os.OpenFile(
-					fmt.Sprintf("media/%s/%s", entry.uuid, filename),
+					fmt.Sprintf("media/%s/%s", entry.Uuid, filename),
 					os.O_CREATE|os.O_APPEND|os.O_RDWR, 0644)
 				io.Copy(f, resp.Body)
 				resp.Body.Close()
-				entry.images = append(entry.images, filename)
+				entry.Images = append(entry.Images, filename)
 				time.Sleep(time.Second)
 			}
 			downloadTags := post.FindAll("a")
@@ -94,12 +97,12 @@ func t66ySearchKeywords(keywords ...string) {
 					if err != nil {
 						log.Println(err)
 					}
-					entry.downloadLink = magnetUrl
+					entry.DownloadLink = magnetUrl
 					break
 				}
 			}
 
-			//if !contains(keywords, title) {
+			//if !contains(keywords, Title) {
 			//	continue
 			//}
 			dateTag := tds[2].Find("div").Find("span")
@@ -107,10 +110,11 @@ func t66ySearchKeywords(keywords ...string) {
 			dateStr = strings.Split(dateStr, " - ")[1]
 			date, _ := time.Parse("2006-01-02", dateStr)
 			t := date.Unix()
-			entry.title = title
-			entry.timestamp = t
-			entry.description = ""
+			entry.Title = title
+			entry.Timestamp = t
+			entry.Description = ""
 			entry.saveToDatabase()
+			getPage(1)
 			time.Sleep(t66y_com_Interval * time.Second)
 		}
 		time.Sleep(t66y_com_Interval * time.Second)

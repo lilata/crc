@@ -19,6 +19,6 @@ func migrateDatabase() {
 	db := getDatabaseConn()
 	defer db.Close()
 	db.Exec(`CREATE TABLE IF NOT EXISTS data_entries 
-                   (uuid TEXT PRIMARY KEY, title TEXT, ts BIGINT, description TEXT,
-                    images TEXT [], download_link TEXT)`)
+                   (id SERIAL PRIMARY KEY, Uuid TEXT, Title TEXT, ts BIGINT, Description TEXT,
+                    Images TEXT [], download_link TEXT)`)
 }

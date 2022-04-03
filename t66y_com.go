@@ -108,8 +108,13 @@ func t66ySearchKeywords(keywords ...string) {
 
 			dateTag := tds[2].Find("div").Find("span")
 			dateStr := dateTag.Attrs()["title"]
-			dateStr = strings.Split(dateStr, " - ")[1]
-			date, _ := time.Parse("2006-01-02", dateStr)
+			dateStrs := strings.Split(dateStr, " - ")
+			var date time.Time
+			if len(dateStr) < 2 {
+				date, _ = time.Parse("2006-01-02", "1998-01-01")
+			} else {
+				date, _ = time.Parse("2006-01-02", dateStrs[1])
+			}
 			t := date.Unix()
 			entry.Title = title
 			entry.Timestamp = t

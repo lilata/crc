@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"fmt"
 	"github.com/anaskhan96/soup"
 	"io"
@@ -97,7 +98,7 @@ func t66ySearchKeywords(keywords ...string) {
 					if err != nil {
 						log.Println(err)
 					}
-					entry.DownloadLink = magnetUrl
+					entry.DownloadLink = base64.StdEncoding.EncodeToString([]byte(magnetUrl))
 					break
 				}
 			}

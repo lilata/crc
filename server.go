@@ -12,6 +12,8 @@ func handlePage(w http.ResponseWriter, r *http.Request) {
 }
 func getRouter() *mux.Router {
 	r := mux.NewRouter()
+	r.PathPrefix("/media/").Handler(http.StripPrefix("/media/",
+		http.FileServer(http.Dir("./media/"))))
 	r.HandleFunc("/{page}", handlePage)
 	return r
 }
